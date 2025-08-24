@@ -1,0 +1,27 @@
+const cubeState = {
+  U: Array(3).fill().map(() => Array(3).fill("W")),
+  D: Array(3).fill().map(() => Array(3).fill("Y")),
+  L: Array(3).fill().map(() => Array(3).fill("O")),
+  R: Array(3).fill().map(() => Array(3).fill("R")),
+  F: Array(3).fill().map(() => Array(3).fill("G")),
+  B: Array(3).fill().map(() => Array(3).fill("B")),
+};
+
+function renderFace(faceName, faceData) {
+  const face = document.querySelector(`.face.${faceName}`);
+  face.innerHTML = "";
+  faceData.forEach(row => {
+    row.forEach(color => {
+      const sticker = document.createElement("div");
+      sticker.style.background = color;
+      face.appendChild(sticker);
+    });
+  });
+}
+
+renderFace("top", cubeState.U);
+renderFace("bottom", cubeState.D);
+renderFace("left", cubeState.L);
+renderFace("right", cubeState.R);
+renderFace("front", cubeState.F);
+renderFace("back", cubeState.B);
