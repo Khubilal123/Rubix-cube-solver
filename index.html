@@ -1,3 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>3D Rubik's Cube</title>
+  <style>
+    body {
+      margin: 0;
+      background: #111;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      perspective: 1000px;
+      color: white;
+      font-family: sans-serif;
+    }
+
+    .cube {
+      position: relative;
+      width: 180px;
+      height: 180px;
+      transform-style: preserve-3d;
+      transform: rotateX(-30deg) rotateY(30deg);
+      transition: transform 1s ease;
+    }
+
+    .face {
+      position: absolute;
+      width: 180px;
+      height: 180px;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      grid-template-rows: repeat(3, 1fr);
+      border: 2px solid #333;
+    }
+
+    .face div {
+      border: 1px solid #000;
+      width: 100%;
+      height: 100%;
+    }
+
+    .front  { transform: translateZ(90px); }
+    .back   { transform: rotateY(180deg) translateZ(90px); }
+    .left   { transform: rotateY(-90deg) translateZ(90px); }
+    .right  { transform: rotateY(90deg) translateZ(90px); }
+    .top    { transform: rotateX(90deg) translateZ(90px); }
+    .bottom { transform: rotateX(-90deg) translateZ(90px); }
+
+    .controls {
+      margin-top: 20px;
+    }
+
+    .controls button {
+      margin: 5px;
+      padding: 8px 12px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Rubik's Cube 3D</h1>
+  <div class="cube">
+    <div class="face front"></div>
+    <div class="face back"></div>
+    <div class="face left"></div>
+    <div class="face right"></div>
+    <div class="face top"></div>
+    <div class="face bottom"></div>
+  </div>
+
+  <div class="controls">
+    <button onclick="scrambleCube()">Scramble</button>
+    <button onclick="resetCube()">Reset</button>
+  </div>
+
+  <script>
+    const colors = {
+      U: "white",
+      D: "yellow",
+      L: "orange",
+      R: "red",
+      F: "green",
+      B: "blue"
+    };
+
+    let cubeState = {
+      U: Array(3).fill().map(() => Array(3).fill(colors.U)),
+      D: Array(3).fill().map(() => Array(3).fill(colors.D)),
+      L: Array(3).fill().map(() => Array(3).fill(colors.L)),
+      R: Array(3).fill().map(() => Array(3).fill(colors.R)),
+      F: Array(3).fill().map(() => Array(3).fill(colors.F)),
+      B: Array(3).fill().map(() => Array(3).fill(colors.B))
+    };
+
+    function renderFace(faceName, faceData) {
+      const face = document.querySelector(`.face.${faceName}`);
+      face.innerHTML = "";
+      faceData.forEach(row => {
+        row.forEach(color => {
+          const sticker = document.createElement("div");
+          sticker.style.background = color;
+          face.appendChild(sticker);
+        });
+      });
+    }
+
+    function renderCube() {
+      renderFace("top", cubeState.U);
+      renderFace("bottom", cubeState.D);
+      renderFace("left", cubeState.L);
+      renderFace("right", cubeState.R);
+      renderFace("front", cubeState.F);
+      renderFace("back", cubeState.B);
+    }
+
+    function scrambleCube() {
+      const allColors = ["white", "yellow", "orange", "red", "green", "blue"];
+      for (let face in cubeState) {
+        cubeState[face] = Array(3).fill().map(() =>
+          Array(3).fill().map(() => allColors[Math.floor(Math.random() * 6)])
+        );
+      }
+      renderCube();
+    }
+
+    function resetCube() {
+      cubeState = {
+        U: Array(3).fill().map(() => Array(3).fill(colors.U)),
+        D: Array(3).fill().map(() => Array(3).fill(colors.D)),
+        L: Array(3).fill().map(() => Array(3).fill(colors.L)),
+        R: Array(3).fill().map(() => Array(3).fill(colors.R)),
+        F: Array(3).fill().map(() => Array(3).fill(colors.F)),
+        B: Array(3).fill().map(() => Array(3).fill(colors.B))
+      };
+      renderCube();
+    }
+
+    renderCube();
+  </script>
+</body>
+</html>
+
+
 <div class="cube">
   <div class="face front"></div>
   <div class="face back"></div>
